@@ -19,7 +19,6 @@ input：
 output：
 142   即做2个一粽子，获得100，4个二粽子，获得40，2个全面粉粽子获得2，共142元
 '''
-# -0-
 import sys
 import functools
 

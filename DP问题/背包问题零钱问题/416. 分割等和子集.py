@@ -23,7 +23,6 @@
 解释: 数组不能分割成两个元素和相等的子集.
 '''
 
-# -0-
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
         # 20200710
