@@ -1,0 +1,61 @@
+# https://leetcode-cn.com/problems/design-hashmap/
+class Bucket:
+
+    def __init__(self):
+        self.bucket = []
+
+    def update(self, key, value):
+        flag = False
+        for i, (k, v) in enumerate(self.bucket):
+            if k == key:
+                self.bucket[i] = (key, value)
+                flag = True
+        if not flag:
+            self.bucket.append((key, value))
+
+    def get(self, key):
+        for k, v in self.bucket:
+            if k == key:
+                return v
+        return -1
+
+    def remove(self, key):
+        for i, (k, v) in enumerate(self.bucket):
+            if k == key:
+                del self.bucket[i]
+                break
+
+
+class MyHashMap:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.hashkey = 2069
+        self.hashmap = [Bucket() for i in range(self.hashkey)]
+
+    def put(self, key: int, value: int) -> None:
+        """
+        value will always be non-negative.
+        """
+        self.hashmap[key % self.hashkey].update(key, value)
+
+    def get(self, key: int) -> int:
+        """
+        Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key
+        """
+        value = self.hashmap[key % self.hashkey].get(key)
+        return value
+
+    def remove(self, key: int) -> None:
+        """
+        Removes the mapping of the specified value key if this map contains a mapping for the key
+        """
+        self.hashmap[key % self.hashkey].remove(key)
+
+# Your MyHashMap object will be instantiated and called as such:
+# obj = MyHashMap()
+# obj.put(key,value)
+# param_2 = obj.get(key)
+# obj.remove(key)
