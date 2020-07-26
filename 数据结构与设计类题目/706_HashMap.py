@@ -5,12 +5,13 @@ class Bucket:
         self.bucket = []
 
     def update(self, key, value):
-        flag = False
+        found = False
         for i, (k, v) in enumerate(self.bucket):
             if k == key:
                 self.bucket[i] = (key, value)
-                flag = True
-        if not flag:
+                found = True
+                break
+        if not found:
             self.bucket.append((key, value))
 
     def get(self, key):

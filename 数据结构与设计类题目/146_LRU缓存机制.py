@@ -1,5 +1,5 @@
 # https://leetcode-cn.com/problems/lru-cache/
-class DueList:
+class DueListNode:
     def __init__(self, k, v):
         self.k = k
         self.v = v
@@ -12,8 +12,8 @@ class LRUCache:
     def __init__(self, capacity: int):
         self.capacity = capacity
         self.hashlist = {}
-        self.head = DueList(0, 0)
-        self.tail = DueList(0, 0)
+        self.head = DueListNode(0, 0)
+        self.tail = DueListNode(0, 0)
         self.head.next = self.tail
         self.tail.prev = self.head
 
@@ -49,7 +49,7 @@ class LRUCache:
     def put(self, key: int, value: int) -> None:
         if key in self.hashlist:
             self.remove(key)
-        node = DueList(key, value)
+        node = DueListNode(key, value)
         self.add(key, node)
         if len(self.hashlist) > self.capacity:
             last = self.tail.prev.k
