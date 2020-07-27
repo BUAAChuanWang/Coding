@@ -28,7 +28,7 @@ class Solution:
             left = helper(root.left)
             right = helper(root.right)
             self.res += sum(l + r <= distance for l in left for r in right)
-            return [i + 1 for i in left + right if i < distance - 1]
+            return [i + 1 for i in left + right if i < distance - 1]    # 剪枝
         self.res = 0
         helper(root)
         return self.res

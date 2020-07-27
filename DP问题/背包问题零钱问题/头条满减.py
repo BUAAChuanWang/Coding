@@ -19,7 +19,7 @@ class Solution:
         dp = [[0 for i in range(len(coins) + 1)] for _ in range(capacity + 1)]
         for i in range(1, len(coins) + 1):
             for j in range(1, capacity + 1):
-                if dp[i-1][j]
+                # if dp[i-1][j]
                 dp[i][j] = dp[i-1][j] or dp[i-1][j-coins[i]]
         # BFS
         queue = [(0, coins[0])]
@@ -44,6 +44,6 @@ class Solution:
                     dp[i] = min(dp[i], dp[j] + coins[i])
                 elif dp[i] < capacity and dp[j] + coins[i] < capacity:
                     dp[i] = max(dp[i], dp[j] + coins[i])
-                elif
+                # elif
                 dp[i] = dp[j] + coins[i] if abs(dp[j] + coins[i] - capacity) < abs(dp[i] - capacity) else dp[i]
-        for i in dp:
+        # for i in dp:
