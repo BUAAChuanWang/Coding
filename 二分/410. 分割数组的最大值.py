@@ -29,12 +29,12 @@ class Solution:
         '''
         首先分析题意，可以得出结论，结果（子数组和的最大值的最小值）必定落在【max（nums）， sum（nums）】这个区间内，
         因为左端点对应每个单独的元素构成一个子数组，右端点对应所有元素构成一个子数组.  
-               
+
         然后可以利用二分查找法逐步缩小区间范围，当区间长度为1时，即找到了最终答案。
-        
+
         每次二分查找就是先算一个mid值，这个mid就是代表当前猜测的答案，然后模拟一下划分子数组的过程，
         可以得到用这个mid值会一共得到的子区间数cnt，然后比较cnt和m的关系，来更新区间范围。
-        
+
         本题跟1014 875 非常类似。
         '''
 
@@ -71,4 +71,4 @@ class Solution:
             for j in range(i - 1, len(nums)):
                 for k in range(0, j):
                     dp[i][j] = min(dp[i][j], max(dp[i - 1][k], presum[j] - presum[k]))
-        return dp[m][len(nums) - 1]) - 1]
+        return dp[m][len(nums) - 1]
