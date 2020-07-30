@@ -16,24 +16,36 @@
 输出: 0
 解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
 '''
+
+
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        if not prices:return 0
+        if not prices: return 0
         # dp_i_k_n i天k次交易n状态时的利润
         # dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1]+prices[i])
         # dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0]-prices[i])
 
         # k=1
         # dp[i][1][0] = max(dp[i-1][1][0], dp[i-1][1][1]+prices[i])
-        # dp[i][k][1] = max(dp[i-1][1][1], dp[i-1][0][0]-prices[i])
+        # dp[i][1][1] = max(dp[i-1][1][1], dp[i-1][0][0]-prices[i])
         #             = max(dp[i-1][1][1], 0-prices[i])
         # k=1是没用的 可简化为两维 dp_i_n  又可优化空间为一维
         dp = [[0 for _ in range(2)] for _ in range(len(prices))]
-        for i in range(len(prices)):
-            if i == 0:
-                dp[0][0] = 0
-                dp[0][1] = -prices[0]
-                continue
-            dp[i][0] = max(dp[i - 1][0], prices[i] + dp[i - 1][1])
-            dp[i][1] = max(dp[i - 1][1], -prices[i])
+        dp[0][0] = 0
+        dp[0][1] = -prices[0]
+        for i in range(1, len(prices)):
+            dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] + prices[i])
+            dp[i][1] = max(dp[i - 1][1], -prices[i])  # 这里必须是 -prices[i] 因为只能买一次
+        return dp[-1][0]
+
+        # 202003
+        if not prices: return 0
+        # dp[i][k][0] = max(dp[i-1][k][0], dp[i][k][1] + prices[i - 1])
+        # dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i - 1])
+        dp = [[0 for _ in range(2)] for _ in range(len(prices) + 1)]
+        dp[0][0] = 0
+        dp[0][1] = float("-inf")
+        for i in range(1, len(prices) + 1):
+            dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] + prices[i - 1])
+            dp[i][1] = max(dp[i - 1][1], -prices[i - 1])
         return dp[-1][0]
