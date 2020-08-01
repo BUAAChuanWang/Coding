@@ -22,6 +22,25 @@ p = "a*"
 '''
 class Solution:
     def isMatch(self, text: str, pattern: str) -> bool:
+        # dp table
+        dp = [[False for _ in range(len(pattern) + 1)] for _ in range(len(text) + 1)]
+        dp[0][0] = True
+        for j in range(1, len(pattern) + 1):
+            if pattern[j] == "*":
+                dp[0][j] = True
+            else:
+                break
+
+        for i in range(1, len(text) + 1):
+            for j in range(1, len(pattern) + 1):
+                if pattern[j - 1] == "*":
+                    dp[i][j] = dp[i][j - 1] or dp[i - 1][j]  # 匹配 or 不匹配
+                elif pattern[j - 1] == "." or text[i] == pattern[j]:
+                    dp[i][j] = dp[i - 1][j - 1]
+        return dp[-1][-1]
+
+
+        '''
         # https://labuladong.gitbook.io/algo/dong-tai-gui-hua-xi-lie/dong-tai-gui-hua-zhi-zheng-ze-biao-da
         memo = {}
         # dp(i, j)表示text[i]和pattern[j]是否匹配
@@ -32,7 +51,7 @@ class Solution:
                 else:
                     first_match = i < len(text) and pattern[j] in {text[i], '.'}
                     if j+1 < len(pattern) and pattern[j+1] == '*':
-                        ans = dp(i, j+2) or first_match and dp(i+1, j)
+                        ans = first_match and dp(i+1, j) or dp(i, j+2)  # 匹配 or 不匹配
                     else:
                         ans = first_match and dp(i+1, j+1)
 
@@ -40,3 +59,4 @@ class Solution:
             return memo[i, j]
 
         return dp(0, 0)
+        '''

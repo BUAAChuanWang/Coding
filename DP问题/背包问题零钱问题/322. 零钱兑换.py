@@ -16,21 +16,21 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
         # https://leetcode-cn.com/problems/perfect-squares/   相似题目 基本一模一样
-        '''
-        # BFS
+        # BFS   因为求最小数量 所以BFS求得的第一个解一定是最小的
         queue = [(amount, 0)]
         seen = {amount}
         while queue:
             cur, step = queue.pop(0)
             if cur == 0:
                 return step
-            for c in coins:
-                new_cur, new_step = cur - c, step + 1
-                if new_cur >= 0 and new_cur not in seen:
-                    queue.append((new_cur, new_step))
+            for i in range(len(coins)):
+                if cur - coins[i] >= 0 and cur - coins[i] not in seen:
+                    seen.add(cur - coins[i])
+                    queue.append((cur - coins[i], step + 1))
         return -1
-        '''
-        # DP
+
+        # 完全背包问题 即物品无限次放入
+        # DP  dpi -> 填满背包i需要的最少物品个数
         dp = [float("inf") for _ in range(amount + 1)]
         dp[0] = 0
         for i in range(1, amount + 1):
@@ -53,8 +53,29 @@ class Solution:
                 dp[i] = min(dp[i], dp[i - coin] + 1)  
         if dp[-1] == float("inf"): return -1
         return dp[-1]
-        '''
-        '''
+
+
+        # DP备忘录直接超时
+        memo = {}
+        def dp(amount, n):
+            if (amount, n) in memo:
+                return memo[(amount, n)]
+            if amount == 0:
+                self.mini = min(self.mini, n)
+                memo[(amount, n)] = self.mini
+                return memo[(amount, n)]
+            for coin in coins:
+                if coin <= amount:
+                    memo[(amount, n)] = dp(amount - coin, n + 1)
+                else:
+                    memo[(amount, n)] = -1
+            return memo[(amount, n)]
+        self.mini = float("inf")
+        dp(amount, 0)
+        # print(memo)
+        return -1 if self.mini == float("inf") else self.mini
+
+
         # 贪心 + 剪枝
         if amount == 0:return 0
 
