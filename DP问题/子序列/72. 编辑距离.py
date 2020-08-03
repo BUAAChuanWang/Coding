@@ -21,6 +21,37 @@ rose -> ros (删除 'e')
 
 class Solution:
     def minDistance(self, word1: str, word2: str) -> int:
+        # 20200801
+        import functools
+        @functools.lru_cache(None)
+        def dp(i, j):  # dp返回的是从前往后 用2匹配1时 当分别到达ij时还需要的操作个数
+            if i >= len(word1) and j >= len(word2): return 0
+            if i >= len(word1): return len(word2) - j
+            if j >= len(word2): return len(word1) - i
+            if word1[i] == word2[j]:
+                return dp(i + 1, j + 1)
+            return min(1 + dp(i + 1, j),  # 增
+                       1 + dp(i, j + 1),  # 删
+                       1 + dp(i + 1, j + 1))  # 替换
+
+        res = dp(0, 0)
+        return res
+
+        import functools
+        @functools.lru_cache(None)
+        def dp(i, j):  # dp返回的是从后往前 到ij时需要操作个数
+            if i < 0 and j < 0: return 0
+            if i < 0: return j + 1
+            if j < 0: return i + 1
+            if word1[i] == word2[j]:
+                return dp(i - 1, j - 1)
+            return min(1 + dp(i - 1, j),  # 增
+                       1 + dp(i, j - 1),  # 删
+                       1 + dp(i - 1, j - 1))  # 替换
+
+        res = dp(len(word1) - 1, len(word2) - 1)
+        return res
+
         # 20200722
         # 递归写dp的写法都是逆向，（比如ali笔试第二题）然后加一个memo。
         # dpij是现在有word1在i，word2在j，然后计算ij到-1-1的花费
