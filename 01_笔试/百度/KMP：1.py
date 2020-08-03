@@ -4,51 +4,7 @@
 1
 '''
 # 原生KMP
-def KMP(source, target):
-    '''
-    KMP字符串匹配的主函数
-    若存在字串返回字串在字符串中开始的位置下标，或者返回-1
-    '''
-    if not target: return 0
-    if not source: return -1
-    n = len(source)
-    m = len(target)
-
-    pnext = gen_pnext(target)
-
-    i, j = 0, 0
-    while i < n and j < m:
-        if source[i] == target[j]:
-            i += 1
-            j += 1
-        elif j != 0:
-            j = pnext[j - 1]
-        else:
-            i += 1
-    if j == m:
-        return i - j
-    else:
-        return -1
-
-def gen_pnext(target):
-    """
-    构造临时数组pnext
-    """
-    index, m = 0, len(target)
-    pnext = [0] * m
-    i = 1
-    while i < m:
-        if target[i] == target[index]:
-            pnext[i] = index + 1
-            index += 1
-            i += 1
-        elif index != 0:
-            index = pnext[index - 1]
-        else:
-            pnext[i] = 0
-            i += 1
-    return pnext
-
+# https://blog.csdn.net/weixin_39561100/article/details/80822208
 
 def KMP_algorithm(string, substring):
     '''
@@ -76,6 +32,10 @@ def KMP_algorithm(string, substring):
 def gen_pnext(substring):
     """
     构造临时数组pnext
+
+    个人理解就是前缀相同覆盖的个数
+    substring: a b c a b g a b c a b d
+    pnext    : 0 0 0 1 2 0 1 2 3 4 5 0
     """
     index, m = 0, len(substring)
     pnext = [0] * m
@@ -90,8 +50,8 @@ def gen_pnext(substring):
         else:
             pnext[i] = 0
             i += 1
+    # print(pnext)
     return pnext
-
 
 if __name__ == "__main__":
     string = 'abcxabcdabcdabcy'
