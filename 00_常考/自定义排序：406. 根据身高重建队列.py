@@ -12,6 +12,12 @@
 输出:
 [[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]
 '''
+# 字典排序
+dic = {2:12, 5:10, 4:8}
+dic_by_key = sorted(dic.items(), key=lambda x: x[0])
+dic_by_value = sorted(dic.items(), key=lambda x: x[1])
+print(dic_by_key, dic_by_value)
+
 class Solution:
     def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
         # 贪心 https://leetcode-cn.com/problems/queue-reconstruction-by-height/solution/gen-ju-shen-gao-zhong-jian-dui-lie-by-leetcode/

@@ -4,7 +4,7 @@
 1
 '''
 # 原生KMP
-# https://blog.csdn.net/weixin_39561100/article/details/80822208
+# 非常好的讲解：https://blog.csdn.net/weixin_39561100/article/details/80822208
 
 def KMP_algorithm(string, substring):
     '''

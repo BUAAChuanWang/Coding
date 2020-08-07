@@ -28,7 +28,7 @@ class Solution:
                 return
             for i in range(len(nums)):
                 # 重点就是剪枝：如果这个数和之前的数一样，并且之前的数还未使用过（说明已经回溯过） 前提是排序过
-                if i in visited or (i > 0 and i - 1 not in visited and nums[i-1] == nums[i]):
+                if i in visited or (i > 0 and nums[i] == nums[i - 1] and i - 1 not in visited):
                     continue
                 visited.add(i)
                 backtrack(track + [nums[i]])

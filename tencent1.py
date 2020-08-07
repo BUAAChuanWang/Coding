@@ -1,3 +1,4 @@
+# 翻转链表
 class ListNode:
     def __init__(self, x):
         self.val = x
@@ -8,8 +9,7 @@ def reverse(self, head):
     pre, cur = None, head
     while cur:
         t = cur.next
-        if pre:
-            cur.next = pre
-        cur = t
+        cur.next = pre
         pre = cur
+        cur = t
     return pre
