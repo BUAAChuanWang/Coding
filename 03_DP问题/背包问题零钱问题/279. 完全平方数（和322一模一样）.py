@@ -12,6 +12,8 @@
 输出: 2
 解释: 13 = 4 + 9.
 '''
+
+
 class Solution:
     def numSquares(self, n: int) -> int:
         # https://leetcode-cn.com/problems/coin-change/   基本一模一样
@@ -31,16 +33,33 @@ class Solution:
                     queue.append((new_cur, new_step))
                     seen.add(new_cur)
         return -1
-        '''
-        # DP
+
+        # 递归dp  6000ms
+        residuals = [x ** 2 for x in range(1, int(n ** 0.5) + 1)]
+
+        @functools.lru_cache(None)
+        def dp(state):
+            if state == 0:
+                return 0
+            res = float("inf")
+            for i in residuals:
+                if i > state:
+                    return res
+                if i <= state:
+                    res = min(res, 1 + dp(state - i))
+            return res
+
+        return dp(n)
+
+        # DP table
         # https://leetcode-cn.com/problems/perfect-squares/solution/chao-zhi-bai-kao-zui-jiang-xiao-xue-sheng-du-neng-/
-        dp = [float("inf") for i in range(n+1)]
+        dp = [float("inf") for i in range(n + 1)]
         dp[0] = 0
         for i in range(1, n + 1):
-            for j in range(1, int(i**0.5) + 1):
-                dp[i] = min(dp[i], dp[i - j*j] + 1)  # dpi表示i需要多少个平方数表示   其实就是N = 1、2、4、9... + N’ 一个数=一个平方数+另一个数
+            for j in range(1, int(i ** 0.5) + 1):
+                dp[i] = min(dp[i], dp[i - j * j] + 1)  # dpi表示i需要多少个平方数表示   其实就是N = 1、2、4、9... + N’ 一个数=一个平方数+另一个数
         return dp[-1]
-        '''
+
         '''
         # DFS 超时
         self.res = float("inf")
