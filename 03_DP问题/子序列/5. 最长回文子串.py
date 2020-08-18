@@ -13,21 +13,27 @@
 '''
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        dp = [[0 for i in range(len(s))] for i in range(len(s))]
-        for i in range(len(s)-1, -1, -1):
+        # dp  labuladong   on2 time on2 space
+        # https://leetcode-cn.com/problems/longest-palindromic-subsequence/
+        # https://leetcode-cn.com/problems/longest-common-subsequence/
+        if not s: return ""
+        dp = [[0 for _ in range(len(s))] for _ in range(len(s))]
+        res = float("-inf")
+        ans = None
+        for i in range(len(s) - 1, -1, -1):
             for j in range(i, len(s)):
                 if i == j:
                     dp[i][j] = 1
                 else:
                     if s[i] == s[j]:
-                        if dp[i+1][j-1]:
-                            dp[i][j] = max(dp[i][j], dp[i+1][j-1] + 2)
-                        else:
-                            dp[i][j] = max(dp[i][j], dp[i+1][j-1], dp[i][j-1])
-                    elif s[i] != s[j]:
-                        dp[i][j] = max(dp[i][j], dp[i][j-1], dp[i+1][j])
-
-
+                        if j - i > 1:
+                            dp[i][j] = dp[i + 1][j - 1] + 2 if dp[i + 1][j - 1] else 0
+                        elif j - i == 1:
+                            dp[i][j] = 2
+                res = max(res, dp[i][j])
+                if res == dp[i][j]:
+                    ans = (i, j)
+        return s[ans[0]:ans[1] + 1]
 
 
         # https://labuladong.gitbook.io/algo/gao-pin-mian-shi-xi-lie/zui-chang-hui-wen-zi-chuan
@@ -45,27 +51,7 @@ class Solution:
             res = res if len(res) > len(s2) else s2
         return res
 
-        # dp  labuladong   on2 time on2 space
-        # https://leetcode-cn.com/problems/longest-palindromic-subsequence/
-        # https://leetcode-cn.com/problems/longest-common-subsequence/
-        if not s: return ""
-        dp = [[0 for _ in range(len(s))]for _ in range(len(s))]
-        res = float("-inf")
-        ans = None
-        for i in range(len(s)-1, -1, -1):
-            for j in range(i, len(s)):
-                if i == j:
-                    dp[i][j] = 1
-                else:
-                    if s[i] == s[j]:
-                        if j - i > 1:
-                            dp[i][j] = dp[i+1][j-1] + 2 if dp[i+1][j-1] else 0
-                        elif j - i == 1:
-                            dp[i][j] = 2
-                res = max(res, dp[i][j])
-                if res == dp[i][j]:
-                    ans = (i, j)
-        return s[ans[0]:ans[1]+1]
+
         '''
         # DP ON2 TIME ON2 SPACE
         size = len(s)
