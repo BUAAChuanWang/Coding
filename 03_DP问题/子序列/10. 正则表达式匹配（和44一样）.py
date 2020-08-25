@@ -41,6 +41,23 @@ class Solution:
 
         return dp(0, 0)
 
+
+        @functools.lru_cache(None)
+        def dp(i, j):  # dp i j    ij是否匹配
+            if j == len(p):
+                return i == len(s)
+            res = None
+            first_match = i < len(s) and p[j] in [".", s[i]]
+            if j < len(p) - 1 and p[j + 1] == "*":
+                res = dp(i, j + 2) or first_match and dp(i + 1, j)
+            else:
+                res = first_match and dp(i + 1, j + 1)
+            return res
+
+        res = dp(0, 0)
+        return res
+
+
         # dp table
         dp = [[False for _ in range(len(pattern) + 1)] for _ in range(len(text) + 1)]
         dp[0][0] = True
