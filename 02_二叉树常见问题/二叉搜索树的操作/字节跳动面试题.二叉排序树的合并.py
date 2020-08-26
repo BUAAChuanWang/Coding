@@ -9,14 +9,80 @@ https://blog.csdn.net/qq_28468707/article/details/105298096?utm_medium=distribut
 递归中序遍历第二棵树的节点，再将节点插入到第一棵树中
 '''
 
+'''
+5 3 7 1 # # 10
+8 2 9 4 # # 12
+'''
 
-class TreeNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
+while 1:
+    class TreeNode(object):
+        def __init__(self, x):
+            self.val = x
+            self.left = None
+            self.right = None
 
 
+    root1 = list(map(str, input().strip().split(" ")))
+    root2 = list(map(str, input().strip().split(" ")))
+    # root1 = [5, 3, 7, 2, 4, 6, 9]
+    # root2 = [8, 1, 10]
+
+    # 递归构建二叉树
+    def helper(root, idx):
+        if idx - 1 >= len(root): return None
+        cur = TreeNode(int(root[idx - 1])) if root[idx - 1] != "#" else None
+        if not cur: return
+        cur.left = helper(root, 2 * idx)
+        cur.right = helper(root, 2 * idx + 1)
+        return cur
+
+    cur1 = helper(root1, 1)
+    cur2 = helper(root2, 1)
+    # print(f"tree1 is :\n{cur1}")
+    # print(f"tree2 is :\n{cur2}")
+
+
+    # 合并两个二叉搜索树
+    def merge2BST(root1, root2):
+        def merge(p, q):  # 把节点q插入树p中
+            dummy = p
+            if not q:
+                return
+            t = TreeNode(q.val)
+            while 1:
+                if p.val > q.val:
+                    if not p.left:
+                        p.left = t
+                        break
+                    else:
+                        p = p.left
+                elif p.val < q.val:
+                    if not p.right:
+                        p.right = t
+                        break
+                    else:
+                        p = p.right
+            return dummy
+
+        merge(root1, root2.left)
+        merge(root1, root2)
+        merge(root1, root2.right)
+        return root1
+
+    mergedtree = merge2BST(cur1, cur2)
+
+    # 中序遍历输出 查看结果是否正确
+    res = []
+    def inorder(root):
+        global res
+        if not root: return
+        inorder(root.left)
+        res.append(root.val)
+        inorder(root.right)
+    inorder(mergedtree)
+    print(res)
+
+'''
 # 根据前序构造二叉树
 def CreateBinTree(l):
     if l:
@@ -99,7 +165,7 @@ if __name__ == '__main__':
 """
 2 4 6 8 9 10 12 13 16 17 18 19 24 26
 """
-
+'''
 
 
 
