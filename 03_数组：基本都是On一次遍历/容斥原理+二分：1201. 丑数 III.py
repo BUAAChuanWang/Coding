@@ -22,50 +22,50 @@
 输入：n = 1000000000, a = 2, b = 217983653, c = 336916467
 输出：1999999984
 '''
-
-# class Solution {
-# 	public int nthUglyNumber(	int n,
-# 								int a,
-# 								int b,
-# 								int c) {
-# 		long ab = lcm(a, b);// a,b的最小公倍数
-# 		long ac = lcm(a, c);
-# 		long bc = lcm(b, c);
-# 		long abc = lcm(ab, c);
-#
-# 		long left = 1, right = 2000000000;
-# 		while (left < right) {
-# 			long mid = left + right >> 1;// 中间值，+优先级高于>>
-# 			// 利用容斥原理计算区间[1, mid]的丑数
-# 			long num = mid / a + mid / b + mid / c;
-# 			num -= mid / bc + mid / ac + mid / ab;
-# 			num += mid / abc;
-# 			if (num < n) {
-# 				left = mid + 1;// 取区间[mid + 1, right]
-# 			} else {
-# 				right = mid;// 取区间[left, mid]
-# 			}
-# 		}
-# 		return (int) left;
-# 	}
 class Solution:
     def nthUglyNumber(self, n: int, a: int, b: int, c: int) -> int:
-        # 计算最大公约数
-        def gcd(a, b):
-            return gcd(b, a % b) if b > 0 else a
-            # if b == 0: return a
-            # return gcd(b, a % b)
-
+        import math
         # 计算最小公倍数
         def lcm(a, b):
-            return a // gcd(a, b) * b
+            return (a * b) // math.gcd(a, b)
 
-        mlist = [a, b, c]
+        # 以下代码求 [1,n]区间中 能被mlist中的任意m整数的数字的个数   可查看pycharm中03_数组/容斥原理
+        def rongchi_count(n, mlist):  # 可以是多个数字不止3个都可以计算
+            ans = 0
+            m = len(mlist)
+            for i in range(1, 1 << m):
+                cnt = 0
+                for j in range(m):
+                    if i & (1 << j):
+                        cnt += 1
+                        if cnt == 1:
+                            gd = mlist[j]
+                        else:
+                            gd = gd * mlist[j] // math.gcd(gd, mlist[j])
+                if cnt & 1:
+                    ans += n // gd
+                else:
+                    ans -= n // gd
+            return ans
+
         l, r = 0, min(a, b, c) * n + 1
         while l < r:
             mid = l + (r - l) // 2
-            cnt = mid // a + mid // b + mid // c - mid // a * b - mid // a * c - mid // b * c + mid // a * b * c
+            cnt = rongchi_count(mid, [a, b, c])
+            # print(f"n={n}, l={l}, r={r}, mid={mid}, cnt={cnt}")
+            if cnt < n:
+                l = mid + 1
+            else:
+                r = mid
+        return l
 
-            if cnt < n: l = mid + 1
-            else: r = mid
+        # 应对本题三个数字的容斥原理 可以直接写公式
+        l, r = 0, min(a, b, c) * n + 1
+        while l < r:
+            mid = l + (r - l) // 2
+            cnt = mid // a + mid // b + mid // c - mid // lcm(a, b) - mid // lcm(a, c) - mid // lcm(b, c) + mid // lcm(lcm(a, b), c)
+            if cnt < n:
+                l = mid + 1
+            else:
+                r = mid
         return l
